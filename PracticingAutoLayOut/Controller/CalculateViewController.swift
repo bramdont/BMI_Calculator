@@ -7,12 +7,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculateViewController: UIViewController {
     @IBOutlet weak var heightValue: UILabel!
     @IBOutlet weak var weightValue: UILabel!
     
     @IBOutlet weak var heightSlider: UISlider!
     @IBOutlet weak var weightSlider: UISlider!
+    
+    var bMI: Float=0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +34,20 @@ class ViewController: UIViewController {
         let weight = Int(sender.value)
         weightValue.text = "\(weight)kg"
     }
-    @IBAction func onCalculateClick(_ sender: Any) {
-        let IMC = weightSlider.value / pow(heightSlider.value, 2)
+    @IBAction func onCalculateClick(_ sender: UIButton) {
+        bMI = weightSlider.value / pow(heightSlider.value, 2)
         
-        print(IMC)
+        performSegue(withIdentifier: "goToResult", sender: self)
+        
+    }
+    
+    //triggered by the performSegue() method. We can use it to pass parameters through the segue to the next screen.
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult" {
+            let destinationVC = segue.destination as! ResultViewController
+            destinationVC.valueBMI = String(format: "%.1f", bMI)
+            
+        }
     }
     
 }
