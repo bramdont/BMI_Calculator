@@ -9,14 +9,13 @@ import UIKit
 
 class ResultViewController: UIViewController {
     
-    var valueBMI: String?
+    var bmiValue: BMI?
 
     @IBOutlet weak var resultBMI: UILabel!
     @IBOutlet weak var advice: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         prepareView()
     }
     
@@ -26,7 +25,9 @@ class ResultViewController: UIViewController {
     }
     //To set all values that has been passed from the segue to the views in the screen, so we can show it to the end user.
     func prepareView() {
-        resultBMI.text = valueBMI
+        resultBMI.text = String(format: "%.1f", bmiValue?.value ?? 0.0)
+        advice.text = bmiValue?.advice ?? "Default"
+        view.backgroundColor = bmiValue?.color
     }
 
 }

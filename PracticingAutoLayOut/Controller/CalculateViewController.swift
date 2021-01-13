@@ -14,15 +14,14 @@ class CalculateViewController: UIViewController {
     @IBOutlet weak var heightSlider: UISlider!
     @IBOutlet weak var weightSlider: UISlider!
     
-    var bMI: Float=0.0
+    var calculatorBrain = Calculator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         heightSlider.setValue(1.5, animated: true)
         weightSlider.setValue(80.0, animated: true)
-        
-        // Do any additional setup after loading the view.
+
     }
 
     @IBAction func onHeightChange(_ sender: UISlider) {
@@ -35,17 +34,18 @@ class CalculateViewController: UIViewController {
         weightValue.text = "\(weight)kg"
     }
     @IBAction func onCalculateClick(_ sender: UIButton) {
-        bMI = weightSlider.value / pow(heightSlider.value, 2)
+        let height = heightSlider.value
+        let weight = weightSlider.value
         
+        calculatorBrain.calculateBMI(height, weight)
         performSegue(withIdentifier: "goToResult", sender: self)
-        
     }
     
     //triggered by the performSegue() method. We can use it to pass parameters through the segue to the next screen.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToResult" {
             let destinationVC = segue.destination as! ResultViewController
-            destinationVC.valueBMI = String(format: "%.1f", bMI)
+            destinationVC.bmiValue = calculatorBrain.getBMI()
             
         }
     }
